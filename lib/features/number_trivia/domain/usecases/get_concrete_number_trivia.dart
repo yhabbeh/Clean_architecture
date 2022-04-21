@@ -1,9 +1,9 @@
  import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
+import '../../../../core/usecases/usecases.dart';
 import '../entities/number_trivia.dart';
 import '../repositories/number_trivia_repository.dart';
 import '../../../../core/error/failures.dart';
-import '../../../../core/error/usecases/usecases.dart';
 
 class GetConcreteNumberTrivia implements UseCase<NumberTrivia, Params> {
   final NumberTriviaRepository repository;
@@ -11,7 +11,7 @@ class GetConcreteNumberTrivia implements UseCase<NumberTrivia, Params> {
   GetConcreteNumberTrivia(this.repository);
 
   @override
-  Future<Either<Failures, NumberTrivia>> call (Params params) async {
+  Future<Either<Failure, NumberTrivia>> call (Params params) async {
     return await repository.getConcreteNumberTrivia(params.number);
   }
 }
