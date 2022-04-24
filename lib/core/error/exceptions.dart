@@ -1,2 +1,2 @@
-class ServerExceptions implements Exception {}
-class CashExceptions implements Exception{}
+class ServerException implements Exception {}
+class CashException implements Exception{}
