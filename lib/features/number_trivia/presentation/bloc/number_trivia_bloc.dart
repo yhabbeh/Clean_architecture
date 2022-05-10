@@ -6,6 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:test1/core/error/failures.dart';
+import 'package:test1/core/usecases/usecases.dart';
 import 'package:test1/core/util/input_converter.dart';
 import 'package:test1/features/number_trivia/domain/usecases/get_concrete_number_trivia.dart';
 import 'package:test1/features/number_trivia/domain/usecases/get_random_number_trivia.dart';
@@ -21,13 +22,13 @@ const String INVALID_INPUT_FAILURE_MESSAGE =
     'Invalid input - the number must be  positive integer or zero.';
 
 class NumberTriviaBloc extends Bloc<NumberTriviaEvent, NumberTriviaState> {
-  final GetConcreteNumberTrivia getConcreteNumberTrivia;
-  final GetRandomNumberTrivia getRandomNumberTrivia;
+  final GetConcreteNumberTrivia concrete;
+  final GetRandomNumberTrivia random;
   final InputConverter inputConverter;
 
   NumberTriviaBloc({
-    required this.getConcreteNumberTrivia,
-    required this.getRandomNumberTrivia,
+    required this.concrete,
+    required this.random,
     required this.inputConverter,
   });
 
@@ -47,7 +48,7 @@ class NumberTriviaBloc extends Bloc<NumberTriviaEvent, NumberTriviaState> {
         (integer) async* {
           yield Loading();
           final failureOrTrivia =
-              await getConcreteNumberTrivia(Params(number: integer));
+              await concrete(Params(number: integer));
           yield failureOrTrivia.fold(
             (failure) => throw Error(
               message: _mapFailureToMessage(failure),
@@ -57,8 +58,18 @@ class NumberTriviaBloc extends Bloc<NumberTriviaEvent, NumberTriviaState> {
         },
       );
     }
-  }
+    else if (event is GetTriviaForRandomNumber){
 
+      yield Loading();
+      final failureOrTrivia = await random(NoParams());
+      yield failureOrTrivia!.fold(
+            (failure) => throw Error(
+          message: _mapFailureToMessage(failure),
+        ),
+            (trivia) => Loaded(trivia: trivia),
+      );
+    }
+  }
   String _mapFailureToMessage(Failure failure) {
     switch (failure.runtimeType) {
       case ServerFailure:

@@ -15,4 +15,4 @@ class GetTriviaForConcreteNumber extends NumberTriviaEvent {
  
 }
 
-class GetTriviaRandomNumber extends NumberTriviaEvent {}
+class GetTriviaForRandomNumber extends NumberTriviaEvent {}
