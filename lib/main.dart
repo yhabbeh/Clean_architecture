@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Number Trivia',
-      home: const NumberTriviaPage(),
+      home: NumberTriviaPage(),
     );
   }
 }
